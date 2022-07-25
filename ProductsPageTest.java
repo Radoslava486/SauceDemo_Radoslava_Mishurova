@@ -1,12 +1,11 @@
 package tests;
 
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,10 +15,14 @@ public class ProductsPageTest extends BaseTest {
     public void sortProductsByPriceFromLowToHighTest() {
         loginPage.login(USERNAME, PASSWORD);
         productsPage.sortProductsFromLowToHighPrice();
-        List<WebElement> sortedItems = driver.findElements(By.className("inventory_item_name"));
-        //тут есть вариант обойтись без локатора?
-        Assert.assertEquals(sortedItems.get(0).getText(), "Sauce Labs Onesie");
-        Assert.assertEquals(sortedItems.get(5).getText(), "Sauce Labs Fleece Jacket");
+        List<String> expectedOrder = new ArrayList<>();
+        expectedOrder.add("Sauce Labs Onesie");
+        expectedOrder.add("Sauce Labs Bike Light");
+        expectedOrder.add("Sauce Labs Bolt T-Shirt");
+        expectedOrder.add("Test.allTheThings() T-Shirt (Red)");
+        expectedOrder.add("Sauce Labs Backpack");
+        expectedOrder.add("Sauce Labs Fleece Jacket");
+        Assert.assertEquals(expectedOrder, productsPage.getActualSortedItemOrder());
 
     }
 
