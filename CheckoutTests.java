@@ -1,5 +1,3 @@
-package tests;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -15,9 +13,9 @@ public class CheckoutTests extends BaseTest {
         itemDetailsPage.navigateToCart();
         cartPage.clickCheckoutButton();
         checkoutPage.fillInApplication();
-        Assert.assertEquals(checkoutPage.isOverviewInfoDisplayed(), "CHECKOUT: OVERVIEW");
+        Assert.assertEquals(checkoutPage.findOverviewInfoText(), "CHECKOUT: OVERVIEW");
         checkoutPage.finishCheckout();
-        Assert.assertEquals(checkoutPage.isPaymentFinished(), "CHECKOUT: COMPLETE!", " Payment's made. Congratulations ");
+        Assert.assertEquals(checkoutPage.findSuccessfulPaymentText(), "CHECKOUT: COMPLETE!", " Payment's made. Congratulations ");
 
     }
 
@@ -29,7 +27,7 @@ public class CheckoutTests extends BaseTest {
         itemDetailsPage.navigateToCart();
         cartPage.clickCheckoutButton();
         checkoutPage.fillInApplication();
-        Assert.assertEquals(checkoutPage.isOverviewInfoDisplayed(), "CHECKOUT: OVERVIEW");
+        Assert.assertEquals(checkoutPage.findOverviewInfoText(), "CHECKOUT: OVERVIEW");
         checkoutPage.cancelCheckout();
         Assert.assertTrue(productsPage.isProductsSorterDisplayed(), "You've been readdressed to product page");
 
