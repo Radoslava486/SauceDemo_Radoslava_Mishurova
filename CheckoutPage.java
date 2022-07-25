@@ -12,20 +12,26 @@ public class CheckoutPage extends HomePage {
     private final By cancelButton = By.id("cancel");
     private final By finishButton = By.id("finish");
 
+    private final By inputButtonsLocator = By.cssSelector(".form_input");
+    private final By continueButton = By.id("continue");
+    String testName = "Radoslava";
+    String testSurname = "Mishurova";
+    String testZipcode = "11111";
+
+
     public CheckoutPage(WebDriver driver) {
         super(driver);
     }
 
-    public String isCheckoutInfoDisplayed() {
+    public String findCheckoutInfoText() {
         return driver.findElement(checkoutHeaderContainer).getText();
     }
 
     public void fillInApplication() {
-        List<WebElement> inputButtons = driver.findElements(By.cssSelector(".form_input"));
-        inputButtons.get(0).sendKeys("Radoslava");
-        inputButtons.get(1).sendKeys("vdc");
-        inputButtons.get(2).sendKeys("12345");
-        By continueButton = By.id("continue");
+        List<WebElement> inputButtons = driver.findElements(inputButtonsLocator);
+        inputButtons.get(0).sendKeys(testName);
+        inputButtons.get(1).sendKeys(testSurname);
+        inputButtons.get(2).sendKeys(testZipcode);
         driver.findElement(continueButton).click();
 
     }
@@ -38,13 +44,14 @@ public class CheckoutPage extends HomePage {
         driver.findElement(finishButton).click();
     }
 
-    public String isOverviewInfoDisplayed() {
+    public String findOverviewInfoText() {
         return driver.findElement(checkoutHeaderContainer).getText();
     }
 
-    public String isPaymentFinished() {
+    public String findSuccessfulPaymentText() {
         return driver.findElement(checkoutHeaderContainer).getText();
     }
 
 }
+
 
