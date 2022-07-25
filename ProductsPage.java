@@ -1,48 +1,88 @@
-package tests;
+package pages;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
-import org.testng.Assert;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+public class ProductsPage extends HomePage {
+
+    private final By productsSortContainer = By.cssSelector("select[class = product_sort_container]");
+    private final By addToCartButton = By.cssSelector("button[id^= add-to-cart]");
+    private final By productLink = By.cssSelector("a[id$=_link]");
+    private final String productContainerLocator
+            = "//div[@class = 'inventory_item_name' and text() = '%s']/ancestor::div[@class='inventory_item']";
+    private final By productNameLocator = By.cssSelector("div[class = inventory_item_name]");
+    private final By productDescriptionLocator = By.cssSelector("div[class = inventory_item_desc]");
+    private final By productPriceLocator = By.cssSelector("div[class = inventory_item_price]");
+    private final By productsPageHeader = By.id("header_container");
+
+    public ProductsPage(WebDriver driver) {
+        super(driver);
+    }
+
+    public boolean isProductPageHeaderDisplayed() {
+
+        return driver.findElement(productsPageHeader).isDisplayed();
+    }
+
+    public boolean isProductsSorterDisplayed() {
+
+        return driver.findElement(productsSortContainer).isDisplayed();
+    }
+
+    public WebElement getProductContainerByName(String productName) {
+        return driver.findElement(By.xpath(String.format(productContainerLocator, productName)));
+    }
+
+    public boolean isProductPresent(String productName) {
+        driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+        try {
+            driver.findElement(productNameLocator);
+        } catch (NoSuchElementException exception) {
+            return false;
+        } finally {
+            driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        }
+        return true;
+    }
 
 
-public class ProductsPageTest extends BaseTest {
-
-    @Test(description = "Sort Products by Price from Low to High", groups = {"Regression"})
-    public void sortProductsByPriceFromLowToHighTest() {
-        loginPage.login(USERNAME, PASSWORD);
-        productsPage.sortProductsFromLowToHighPrice();
-        List<String> expectedOrder = new ArrayList<>();
-        expectedOrder.add("Sauce Labs Onesie");
-        expectedOrder.add("Sauce Labs Bike Light");
-        expectedOrder.add("Sauce Labs Bolt T-Shirt");
-        expectedOrder.add("Test.allTheThings() T-Shirt (Red)");
-        expectedOrder.add("Sauce Labs Backpack");
-        expectedOrder.add("Sauce Labs Fleece Jacket");
-        Assert.assertEquals(expectedOrder, productsPage.getActualSortedItemOrder());
+    public String getProductDescription(String productName) {
+        WebElement productContainer = getProductContainerByName(productName);
+        return productContainer.findElement(productDescriptionLocator).getText();
 
     }
 
-    @Test(description = "Verify all Item Names, Prices and Descriptions on Products Page", dataProvider = "itemDataAssert", groups = {"Regression"})
-    public void verifyItemNamesDescriptionsAndPricesTest(String name, String description, String price) {
-        loginPage.login(USERNAME, PASSWORD);
-        Assert.assertTrue(productsPage.isProductPresent(name));
-        Assert.assertEquals(productsPage.getProductDescription(name), description);
-        Assert.assertEquals(productsPage.getProductPrice(name), price);
+    public String getProductPrice(String productName) {
+        WebElement productContainer = getProductContainerByName(productName);
+        return productContainer.findElement(productPriceLocator).getText();
+
     }
 
-    @DataProvider(name = "itemDataAssert")
-    public Object[][] verifyItemInfoData() {
-        return new Object[][]{
-                {"Sauce Labs Backpack", "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.", "$29.99"},
-                {"Sauce Labs Bike Light", "A red light isn't the desired state in testing but it sure helps when riding your bike at night. Water-resistant with 3 lighting modes, 1 AAA battery included.", "$9.99"},
-                {"Sauce Labs Bolt T-Shirt", "Get your testing superhero on with the Sauce Labs bolt T-shirt. From American Apparel, 100% ringspun combed cotton, heather gray with red bolt.", "$15.99"},
-                {"Sauce Labs Fleece Jacket", "It's not every day that you come across a midweight quarter-zip fleece jacket capable of handling everything from a relaxing day outdoors to a busy day at the office.", "$49.99"},
-                {"Sauce Labs Onesie", "Rib snap infant onesie for the junior automation engineer in development. Reinforced 3-snap bottom closure, two-needle hemmed sleeved and bottom won't unravel.", "$7.99"},
-                {"Test.allTheThings() T-Shirt (Red)", "This classic Sauce Labs t-shirt is perfect to wear when cozying up to your keyboard to automate a few tests. Super-soft and comfy ringspun combed cotton.", "$15.99"}
-        };
+    public void openItemByName(String productName) {
+        WebElement productContainer = getProductContainerByName(productName);
+        productContainer.findElement(productLink).click();
     }
+
+
+    public void clickAddToCartButton(String productName) {
+        WebElement productContainer = getProductContainerByName(productName);
+        productContainer.findElement(addToCartButton).click();
+    }
+
+    public void sortProductsFromLowToHighPrice() {
+        WebElement dropdownElement = driver.findElement(productsSortContainer);
+        Select select = new Select(dropdownElement);
+        select.selectByVisibleText("Price (low to high)");
+    }
+
+    public List<String> getActualSortedItemOrder() {
+        return driver.findElements(By.className("inventory_item_name")).stream().map(WebElement::getText).toList();
+    }
+
 }
