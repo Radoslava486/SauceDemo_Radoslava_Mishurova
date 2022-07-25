@@ -26,7 +26,7 @@ public class CartTest extends BaseTest {
         itemDetailsPage.clickAddToCartButton();
         itemDetailsPage.navigateToCart();
         cartPage.clickCheckoutButton();
-        Assert.assertEquals(checkoutPage.isCheckoutInfoDisplayed(), "CHECKOUT: YOUR INFORMATION", "Personal info is required");
+        Assert.assertEquals(checkoutPage.findCheckoutInfoText(), "CHECKOUT: YOUR INFORMATION", "Personal info is required");
 
 
     }
