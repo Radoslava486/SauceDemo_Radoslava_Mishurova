@@ -75,10 +75,10 @@ public class ProductsPage extends HomePage {
         productContainer.findElement(addToCartButton).click();
     }
 
-    public void sortProductsFromLowToHighPrice() {
+    public void sortProducts(String option) {
         WebElement dropdownElement = driver.findElement(productsSortContainer);
         Select select = new Select(dropdownElement);
-        select.selectByVisibleText("Price (low to high)");
+        select.selectByVisibleText(option);
     }
 
     public List<String> getActualSortedItemOrder() {

@@ -14,7 +14,7 @@ public class ProductsPageTest extends BaseTest {
     @Test(description = "Sort Products by Price from Low to High", groups = {"Regression"})
     public void sortProductsByPriceFromLowToHighTest() {
         loginPage.login(USERNAME, PASSWORD);
-        productsPage.sortProductsFromLowToHighPrice();
+        productsPage.sortProducts("Price (low to high)");
         List<String> expectedOrder = new ArrayList<>();
         expectedOrder.add("Sauce Labs Onesie");
         expectedOrder.add("Sauce Labs Bike Light");
