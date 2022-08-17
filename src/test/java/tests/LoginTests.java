@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.Description;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -7,7 +8,8 @@ import org.testng.annotations.Test;
 
 public class LoginTests extends BaseTest {
 
-    @Test(description = "positive Login Test", groups = {"Smoke"})
+    @Test(groups = {"Smoke"})
+    @Description("positive Login Test")
     public void positiveLoginTest() {
         loginPage.setUsername(USERNAME);
         loginPage.setPassword(PASSWORD);
@@ -15,7 +17,8 @@ public class LoginTests extends BaseTest {
         Assert.assertTrue(productsPage.isProductPageHeaderDisplayed());
     }
 
-    @Test(description = "negative Login Test", dataProvider = "negativeLoginData", groups = {"Negative", "Regression"})
+    @Test(dataProvider = "negativeLoginData", groups = {"Negative", "Regression"})
+    @Description("negative Login Test")
     public void negativeLoginTest(String userName, String password, String errorMessage) {
         loginPage.setUsername(userName);
         loginPage.setPassword(password);

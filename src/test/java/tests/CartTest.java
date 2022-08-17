@@ -1,12 +1,14 @@
 package tests;
 
+import io.qameta.allure.Description;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
 public class CartTest extends BaseTest {
 
-    @Test(description = "Remove Item From the Cart", groups = {"Regression"})
+    @Test(groups = {"Regression"})
+    @Description("Remove Item From the Cart")
     public void removeItemCartTest() {
         loginPage.login(USERNAME, PASSWORD);
         productsPage.openItemByName(PRODUCT_NAME);
@@ -19,7 +21,8 @@ public class CartTest extends BaseTest {
 
     }
 
-    @Test(description = "Positive Cart Test", groups = {"Smoke"})
+    @Test(groups = {"Smoke"})
+    @Description("Positive Cart Test")
     public void positiveCartTest() {
         loginPage.login(USERNAME, PASSWORD);
         productsPage.openItemByName(PRODUCT_NAME);
@@ -31,7 +34,8 @@ public class CartTest extends BaseTest {
 
     }
 
-    @Test(description = "Verify Added Item Quantity In The Cart", groups = {"Smoke"})
+    @Test(groups = {"Smoke"})
+    @Description("Verify Added Item Quantity In The Cart")
     public void verifyItemQuantity() {
         loginPage.login(USERNAME, PASSWORD);
         productsPage.openItemByName(PRODUCT_NAME);
@@ -42,7 +46,8 @@ public class CartTest extends BaseTest {
     }
 
 
-    @Test(description = "Verify Added Item By Name, Price and Description on Cart Page", groups = {"Smoke"})
+    @Test(groups = {"Smoke"})
+    @Description("Verify Added Item By Name, Price and Description on Cart Page")
     public void verifyItemByNameAndPriceOnCartPage() {
         loginPage.login(USERNAME, PASSWORD);
         productsPage.openItemByName(PRODUCT_NAME);

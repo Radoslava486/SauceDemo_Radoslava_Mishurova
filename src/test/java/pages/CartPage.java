@@ -1,8 +1,11 @@
 package pages;
 
+import io.qameta.allure.Attachment;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import utils.AllureUtils;
 
 
 public class CartPage extends HomePage {
@@ -20,14 +23,22 @@ public class CartPage extends HomePage {
         super(driver);
     }
 
+    @Step("Continuing shopping")
+    @Attachment(value = "screenshot", type = "image/png")
     public void clickContinueShoppingButton() {
         driver.findElement(continueShoppingButton).click();
+        AllureUtils.attachScreenshot(driver);
     }
 
+@Step("Removing item from the cart")
+@Attachment(value = "screenshot", type = "image/png")
     public void clickRemoveItemButton() {
         driver.findElement(removeItemButton).click();
+    AllureUtils.attachScreenshot(driver);
     }
 
+@Step("Proceeding to checkout")
+@Attachment(value = "screenshot", type = "image/png")
     public void clickCheckoutButton() {
         driver.findElement(checkoutButton).click();
     }
@@ -35,7 +46,8 @@ public class CartPage extends HomePage {
     public String getItemQuantity() {
         return driver.findElement(quantityButton).getText();
     }
-
+@Step("Checking whether cart is empty")
+@Attachment(value = "screenshot", type = "image/png")
     public boolean isEmpty() {
         try {
             driver.findElement(itemButton);

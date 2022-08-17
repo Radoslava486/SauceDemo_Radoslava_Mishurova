@@ -1,7 +1,10 @@
 package pages;
 
+import io.qameta.allure.Attachment;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import utils.AllureUtils;
 
 public class LoginPage extends BasePage {
 
@@ -21,11 +24,13 @@ public class LoginPage extends BasePage {
     public String getErrorMessageText() {
         return driver.findElement(errorMessage).getText();
     }
-
+@Step("Logging in")
+@Attachment(value = "screenshot", type = "image/png")
     public void login(String username, String password) {
         setUsername(username);
         setPassword(password);
         clickLoginButton();
+    AllureUtils.attachScreenshot(driver);
     }
 
     public void setUsername(String username) {

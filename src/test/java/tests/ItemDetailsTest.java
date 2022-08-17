@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.Description;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -8,7 +9,8 @@ public class ItemDetailsTest extends BaseTest {
 
     final static String PRODUCT_NAME = "Sauce Labs Fleece Jacket";
 
-    @Test(description = "Verify Item By Name, Price and Description on Item Details Page", groups = {"Smoke"})
+    @Test(groups = {"Smoke"})
+    @Description("Verify Item By Name, Price and Description on Item Details Page")
     public void verifyItemByNameAndPriceOnDetailsPage() {
         loginPage.login(USERNAME, PASSWORD);
         productsPage.openItemByName(PRODUCT_NAME);
@@ -17,7 +19,8 @@ public class ItemDetailsTest extends BaseTest {
         Assert.assertEquals(itemDetailsPage.getItemPrice(), "$49.99");
     }
 
-    @Test(description = "Go to Home Page from Item Details Page", groups = {"Regression"})
+    @Test(groups = {"Regression"})
+    @Description("Go to Home Page from Item Details Page")
     public void goToHomePageFromDetailsPage() {
         loginPage.login(USERNAME, PASSWORD);
         productsPage.openItemByName(PRODUCT_NAME);
