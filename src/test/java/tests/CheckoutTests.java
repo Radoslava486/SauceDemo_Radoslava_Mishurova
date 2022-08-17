@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.Description;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -7,7 +8,8 @@ import org.testng.annotations.Test;
 public class CheckoutTests extends BaseTest {
 
 
-    @Test(description = "positive Checkout Test", groups = {"Smoke"})
+    @Test(groups = {"Smoke"})
+    @Description("positive Checkout Test")
     public void positiveCheckoutTest() {
         loginPage.login(USERNAME, PASSWORD);
         productsPage.openItemByName(PRODUCT_NAME);
@@ -21,7 +23,8 @@ public class CheckoutTests extends BaseTest {
 
     }
 
-    @Test(description = "Cancel Checkout", groups = {"Regression"})
+    @Test(groups = {"Regression"})
+    @Description("Cancel Checkout")
     public void cancelCheckoutTest() {
         loginPage.login(USERNAME, PASSWORD);
         productsPage.openItemByName(PRODUCT_NAME);

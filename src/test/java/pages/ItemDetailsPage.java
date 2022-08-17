@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -16,10 +17,12 @@ public class ItemDetailsPage extends HomePage {
         super(driver);
     }
 
+@Step("Adding item to cart")
     public void clickAddToCartButton() {
         driver.findElement(addToCartButton).click();
     }
 
+@Step("Opening products page")
     public void clickBackToProductsButton() {
         driver.findElement(backToProductButton).click();
     }

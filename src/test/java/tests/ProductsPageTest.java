@@ -1,32 +1,58 @@
 package tests;
 
 
+import io.qameta.allure.Description;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 
 public class ProductsPageTest extends BaseTest {
 
-    @Test(description = "Sort Products by Price from Low to High", groups = {"Regression"})
-    public void sortProductsByPriceFromLowToHighTest() {
+    @Test(groups = {"Regression"})
+    @Description("Sort Products by Name")
+    public void sortProductsByNameTest() {
         loginPage.login(USERNAME, PASSWORD);
-        productsPage.sortProducts("Price (low to high)");
+        productsPage.sortProducts("Name (A to Z)");
         List<String> expectedOrder = new ArrayList<>();
-        expectedOrder.add("Sauce Labs Onesie");
+        expectedOrder.add("Sauce Labs Backpack");
         expectedOrder.add("Sauce Labs Bike Light");
         expectedOrder.add("Sauce Labs Bolt T-Shirt");
-        expectedOrder.add("Test.allTheThings() T-Shirt (Red)");
-        expectedOrder.add("Sauce Labs Backpack");
         expectedOrder.add("Sauce Labs Fleece Jacket");
+        expectedOrder.add("Sauce Labs Onesie");
+        expectedOrder.add("Test.allTheThings() T-Shirt (Red)");
         Assert.assertEquals(expectedOrder, productsPage.getActualSortedItemOrder());
-
+        productsPage.sortProducts("Name (Z to A)");
+        expectedOrder = expectedOrder.stream().sorted(Comparator.reverseOrder()).toList();
+        Assert.assertEquals(expectedOrder, productsPage.getActualSortedItemOrder());
     }
 
-    @Test(description = "Verify all Item Names, Prices and Descriptions on Products Page", dataProvider = "itemDataAssert", groups = {"Regression"})
+    @Test(groups = {"Regression"})
+    @Description("Sort Products by Price")
+    public void sortProductsByPriceTest() {
+        loginPage.login(USERNAME, PASSWORD);
+        productsPage.sortProducts("Price (low to high)");
+        List<Double> expectedOrder = new ArrayList<>();
+        expectedOrder.add(7.99);
+        expectedOrder.add(9.99);
+        expectedOrder.add(15.99);
+        expectedOrder.add(15.99);
+        expectedOrder.add(29.99);
+        expectedOrder.add(49.99);
+        Assert.assertEquals(expectedOrder, productsPage.getActualSortedItemsPrices());
+        productsPage.sortProducts("Price (high to low)");
+        expectedOrder = expectedOrder.stream().sorted(Comparator.reverseOrder()).toList();
+        Assert.assertEquals(expectedOrder, productsPage.getActualSortedItemsPrices());
+    }
+
+    @Test(dataProvider = "itemDataAssert", groups = {"Regression"})
+    @Description("Verify all Item Names, Prices and Descriptions on Products Page")
     public void verifyItemNamesDescriptionsAndPricesTest(String name, String description, String price) {
         loginPage.login(USERNAME, PASSWORD);
         Assert.assertTrue(productsPage.isProductPresent(name));
@@ -45,4 +71,14 @@ public class ProductsPageTest extends BaseTest {
                 {"Test.allTheThings() T-Shirt (Red)", "This classic Sauce Labs t-shirt is perfect to wear when cozying up to your keyboard to automate a few tests. Super-soft and comfy ringspun combed cotton.", "$15.99"}
         };
     }
+    @Test(groups = {"Regression"})
+    @Description("Twitter Link")
+    public void verifyTwitterLinkTest() {
+        loginPage.login(USERNAME, PASSWORD);
+        productsPage.goToTwitter();
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.urlContains("twitter.com"));
+        Assert.assertEquals(productsPage.getLink(), "https://twitter.com/saucelabs");
+    }
+
 }
