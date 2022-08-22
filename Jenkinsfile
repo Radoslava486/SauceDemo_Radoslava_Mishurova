@@ -32,9 +32,7 @@ pipeline {
                 success {
                     junit '**/target/surefire-reports/TEST-*.xml'
                 }
-              def cmd_exec(command) {
-    return bat(returnStdout: true, script: "${command}").trim()
-}
+              
             }
         }
         stage('Generate Allure report') {
@@ -52,4 +50,8 @@ pipeline {
         }
 
     }
+}
+
+def cmd_exec(command) {
+    return bat(returnStdout: true, script: "${command}").trim()
 }
