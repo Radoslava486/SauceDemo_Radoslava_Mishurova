@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    triggers {
+            cron('H 9,21 * * 1-7')
+            pollSCM('H */4 * * 1-7')
+        }
+
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
         maven "M3"
@@ -8,6 +13,7 @@ pipeline {
 
     parameters {
      gitParameter branchFilter: 'origin/(.*)', defaultValue: 'master', name: 'BRANCH', type: 'PT_BRANCH'
+     suiteParameter
     }
 
   stages {
@@ -16,11 +22,10 @@ pipeline {
                 // Get some code from a GitHub repository
                 git branch: "${params.BRANCH}", url: 'https://github.com/Radoslava486/SauceDemo_Radoslava_Mishurova.git'
 
-                // Run Maven on a Unix agent.
-               bat "mvn -Dmaven.test.failure.ignore=true clean test"
 
-                // To run Maven on a Windows agent, use
-                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
+               bat "mvn -Dmaven.test.failure.ignore=true clean package"
+
+
             }
 
             post {
