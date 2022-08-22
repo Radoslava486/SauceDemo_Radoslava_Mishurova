@@ -1,29 +1,28 @@
 pipeline {
     agent any
 
-    triggers {
-            cron('H 9,21 * * 1-7')
-            pollSCM('H */4 * * 1-7')
-        }
-
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
         maven "M3"
     }
-
+   
     parameters {
-     gitParameter branchFilter: 'origin/(.*)', defaultValue: 'master', name: 'BRANCH', type: 'PT_BRANCH'
+     string(defaultValue: 'smokeTest.xml', name: 'SUITE_NAME')
+     
+     gitParameter(branchFilter: 'origin/(.*)', defaultValue: 'master', name: 'BRANCH', type: 'PT_BRANCH')
     }
 
   stages {
         stage('Run tests') {
             steps {
                 // Get some code from a GitHub repository
-                git branch: "${params.BRANCH}", url: 'https://github.com/Radoslava486/SauceDemo_Radoslava_Mishurova.git'
+                git branch: "${params.BRANCH}", url: 'https://github.com/voropa/SauceDemo_QA19.git'
 
-                sh "echo 123"
-//mvn -Dmaven.test.failure.ignore=true clean test
+                // Run Maven on a Unix agent.
+                bat "mvn -Dmaven.test.failure.ignore=true -DsuiteXmlFile=${params.SUITE_NAME} clean test"
 
+                // To run Maven on a Windows agent, use
+                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
             }
 
             post {
@@ -32,7 +31,6 @@ pipeline {
                 success {
                     junit '**/target/surefire-reports/TEST-*.xml'
                 }
-              
             }
         }
         stage('Generate Allure report') {
@@ -50,8 +48,4 @@ pipeline {
         }
 
     }
-}
-
-def cmd_exec(command) {
-    return bat(returnStdout: true, script: "${command}").trim()
 }
