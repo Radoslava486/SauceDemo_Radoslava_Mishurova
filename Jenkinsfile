@@ -21,7 +21,7 @@ pipeline {
                 // Get some code from a GitHub repository
                 git branch: "${params.BRANCH}", url: 'https://github.com/Radoslava486/SauceDemo_Radoslava_Mishurova.git'
 
-                bat "echo 123"
+                cmd_exec("echo 123")
 //mvn -Dmaven.test.failure.ignore=true clean test
 
             }
@@ -32,6 +32,9 @@ pipeline {
                 success {
                     junit '**/target/surefire-reports/TEST-*.xml'
                 }
+              def cmd_exec(command) {
+    return bat(returnStdout: true, script: "${command}").trim()
+}
             }
         }
         stage('Generate Allure report') {
