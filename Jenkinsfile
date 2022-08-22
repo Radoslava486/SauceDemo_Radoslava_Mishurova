@@ -21,8 +21,7 @@ pipeline {
                 // Get some code from a GitHub repository
                 git branch: "${params.BRANCH}", url: 'https://github.com/Radoslava486/SauceDemo_Radoslava_Mishurova.git'
 
-
-               bat "mvn -Dmaven.test.failure.ignore=true clean package"
+                bat "mvn -Dmaven.test.failure.ignore=true clean test"
 
 
             }
