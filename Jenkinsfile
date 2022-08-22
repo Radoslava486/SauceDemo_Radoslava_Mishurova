@@ -21,7 +21,7 @@ pipeline {
                 // Get some code from a GitHub repository
                 git branch: "${params.BRANCH}", url: 'https://github.com/Radoslava486/SauceDemo_Radoslava_Mishurova.git'
 
-                cmd_exec("echo 123")
+                powershell "echo 123"
 //mvn -Dmaven.test.failure.ignore=true clean test
 
             }
