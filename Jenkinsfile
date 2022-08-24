@@ -15,6 +15,8 @@ pipeline {
      string(defaultValue: 'smokeTest.xml', name: 'SUITE_NAME')
 
      gitParameter branchFilter: 'origin/(.*)', defaultValue: 'master', name: 'BRANCH', type: 'PT_BRANCH'
+        
+     choice(name: 'BROWSER', choices: ['chrome', 'opera'])
     }
 
   stages {
@@ -23,7 +25,9 @@ pipeline {
                 // Get some code from a GitHub repository
                 git branch: "${params.BRANCH}", url: 'https://github.com/Radoslava486/SauceDemo_Radoslava_Mishurova.git'
 
-                bat "mvn -Dmaven.test.failure.ignore=true -DsuiteXmlFile=${params.SUITE_NAME} -Dbrowser=%{browser}% -Dheadless=%{headless}% clean package"
+
+                bat "mvn -Dmaven.test.failure.ignore=true -DsuiteXmlFile=${params.SUITE_NAME} -Dbrowser=${params.BROWSER} clean test"
+
 
             }
 
